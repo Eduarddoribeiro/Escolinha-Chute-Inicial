@@ -138,9 +138,6 @@ body {
 
 /* Para telas maiores que 768px (desktops pequenos) */
 @media (min-width: 769px) {
-    .custom-img {
-        width: 80%; 
-    }
 
     .btn {
         padding: 12px 20px; 
@@ -181,8 +178,10 @@ body {
     }
 
     .navbar-brand {
-        margin-left: 30% !important; 
+        margin-left: 26% !important; 
+        
     }
+   
 
     .navbar-nav {
         margin-right: 15%; 
@@ -241,17 +240,16 @@ footer {
 }
 
 @media (min-width: 1200px) { 
-    .custom-img {
-        width: 70%; 
-    }
+    
     .bem-vindo {
         margin: 0 auto;
     }
 }
 
 @media (min-width: 998px) {
-    .bem-vindo {
-        font-size: 2.2em;
+    .custom-img {
+        width: 100%; 
+        
     }
 }
 
@@ -265,4 +263,21 @@ footer {
 
 .fade-in-text.visible {
     opacity: 1; /* Torna visível */
+}
+
+@media (min-width: 998px) {
+    .container {
+        max-width: 50%;
+    }
+    .bem-vindo {
+        font-size: 2.2em;
+    }
+    .custom-img {
+        max-width: 100%;
+        max-height: 90%;
+    }
+}
+
+.custom-img {
+    border-radius: 2%;
 }
