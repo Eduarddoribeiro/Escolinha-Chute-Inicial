@@ -1,31 +1,52 @@
+<?php
+include 'config.php';
+//PAINEL DO ADMINISTRADOR
+
+//SENHA PARA O ACESSO
+$senhaSecreta = "123";
+
+// Se a requisição for do tipo POST, a próxima linha pega o valor enviado pelo formulário que tem o campo com o nome senha e armazena esse valor na variável $senhaDigitada.
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    $senhaDigitada = $_POST['senha'];
+
+    // DIGITOU A SENHA CERTA
+    if($senhaDigitada === $senhaSecreta) {
+        $sql = "SELECT * FROM formulario";
+        $result = $conn->query($sql);
+    } else {
+        echo "Senha Incorreta!";
+    }
+}
+?>
+
 <!doctype html>
 <html lang="pt-br">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Escolinha Chute Inicial - Contato</title>
-    <!--Fontes-->
+    <!-- Fontes -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Inter:wght@100..900&family=Montserrat:wght@100..900&family=Nunito:wght@200..1000&family=Poppins:wght@100..900&display=swap');
     </style>
-    <!--Fim das fontes-->
+    <!-- Fim das fontes -->
     <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-sm  fixed-top navbar-custom">
-        <!--Logo-->
+        <!-- Logo -->
         <a href="index.html" class="navbar-brand ms-3">
             <img src="fotor-20241024174712.png" alt="Logo Escolinha Chute Inicial">
         </a>
         
-        <!--Hamburguer-->
+        <!-- Hamburguer -->
         <button class="navbar-toggler me-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <img src="images/menu-hamburguer.svg" alt="menu Hambúrguer" style="height: 40px; width: 40px;">
         </button>
     
-        <!--Navegação - Menu-->
+        <!-- Navegação - Menu -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto ">
                 <li class="nav-item lista-aberta">
@@ -46,35 +67,44 @@
             </ul>
         </div>
     </nav>
-     <!--Fim Navegação - Menu-->
-            <div class="container text-center pt-5">
-    
-                <div class="card mt-5">
-                    <div class="card-body">
-                        <form action="dados-form.php" method="POST" class="footer-form form-contato">
-                            <h4 class="card-title subtitulo2 mb-3">Entre em contato conosco</h4>
-                        
-                            <label for="nome" class>Nome:</label><br>
-                            <input type="text" id="nome" name="nome" required class="form-control" placeholder="Digite seu nome completo"><br>
-                            
-                            <label for="telefone">Telefone:</label><br>
-                            <input type="tel" id="telefone" name="telefone" class="form-control"required placeholder="Digite seu número de telefone"><br>
-    
-                            <label for="email" class="form-label">Email:</label><br>
-                            <input type="text" id="email" name="email" class="form-control" required placeholder="Digite seu e-mail"><br>
-                            
-                            <label class="mt-1 mb-2">
-                                <input type="checkbox" name="consent" required> Concordo em receber comunicações.
-                            </label><br>
-                            
-                            <button class="mt-2 btn-enviar btn" type="submit">Enviar</button>
-                        </form>
-                    </div>
-                </div>
-    
+     <!-- Fim Navegação - Menu -->
+     <div class="container text-center pt-5">
+        <div class="card mt-5">
+            <div class="card-body">
+                <!-- Adicionamos o atributo method="POST" para garantir que o valor da senha seja enviado ao servidor -->
+                <form class="footer-form form-contato" method="POST">
+                    <h4 class="card-title subtitulo2 mb-3">Painel de controle</h4>
+                    <label for="senha">Senha:</label><br>
+                    <input type="password" id="senha" name="senha" required class="form-control" placeholder="Digite sua senha"><br>
+                    <button class="mt-2 btn-enviar btn" type="submit">Enviar</button>
+                </form>
             </div>
         </div>
-</div>
+    </div>
+    <div class="container text-center pt-1">
+        <div class="card mt-3">
+            <div class="card-body">
+                <form class="footer-form form-contato">
+                    <h4 class="card-title subtitulo2 mb-3">Banco de dados</h4>
+                </form>
+                <ul class="text-start">
+                    <?php
+                    // Verifica se o resultado contém dados antes de tentar acessá-los, evitando erros de índice nulo.
+                    if (isset($result) && $result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<li><strong>Nome:</strong> " . $row["nome"] . "<br>";
+                            echo "<strong>Telefone:</strong> " . $row["telefone"] . "<br>";
+                            echo "<strong>Email:</strong> " . $row["email"] . "<br>";
+                            echo "<strong>Data e hora:</strong> " . $row["data"] . " às " . $row["hora"] . "<br></li>";
+                        }
+                    } else {
+                        echo "Nenhum dado encontrado.";
+                    }
+                    ?>
+                </ul>
+            </div>
+        </div>
+    </div>
 
 <footer class="bg-dark text-white text-center p-4 mt-5">
     <div class="container">
@@ -113,16 +143,4 @@
     <div class="footer-text small">
         <p class="mb-1">&copy; 2024 Escolinha Chute Inicial.</p>
         <p class="mb-1">Todos os direitos reservados.</p>
-        <p class="mb-1">Desenvolvido por <a class="text-decoration-none" href="https://www.instagram.com/eduarddoribeiro/">Eduardo Ribeiro</a></p>
-    </div>
-</footer>
-    
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-</body>
-</html>
+        <p class="mb-1">Des
